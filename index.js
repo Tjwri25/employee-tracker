@@ -209,43 +209,83 @@ addDept = () => {
 
 
 
-const addRole = () => {
+addRole = () => {
+   
     inquirer
         .prompt([
             {
                 type: "input",
-                message: "What's the name of the role?",
-                name: "newRole"
+                name: "newRole",
+                message: "What's the name of this role?"
+                
             },
             {
                 type: "input",
-                message: "What is the salary for this role?",
-                name: "addSal"
+                name: "addSal",
+                message: "What is the salary for this role?"
+                
             },
             {
                 type: "input",
-                message: "What is the department id number?",
-                name: "deptId"
+                name: "deptId",
+                message: "What is the department id number?"
+               
             }
         ]).then(function (answer) {
             connection.query(
                 "INSERT INTO role SET ?",
                 {
-                    name: answer.newRole,
-                    name: answer.addSal,
-                    name: answer.deptId
+                    title: answer.newRole,
+                    salary: answer.addSal,
+                    department_id: answer.deptId
                 });
-          
+           
                 console.log(`${answer.newRole} has successfully been added to Roles`);
                 mainMenu();
             
 
         })
 };
+addRole = () => { 
+    connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role",   function(err, res) {
+      inquirer.prompt([
+          {
+            name: "title",
+            type: "input",
+            message: "What is the title of this role"
+          },
+          {
+            name: "salary",
+            type: "input",
+            message: "What is the salary of this role?"
+  
+          },
+          {
+            name: "deptId",
+            type: "input",
+            message: "What is the department id number?"
+           
+        }
+      ]).then(function(answer) {
+          connection.query(
+              "INSERT INTO role SET ?",
+              {
+                title: answer.title,
+                salary: answer.salary,
+                department_id: answer.deptId
+              },
+              function(err) {
+                  if (err) throw err
+                  console.log(`${answer.newRole} has successfully been added to Roles`);
+                  mainMenu();
+              }
+          )
+  
+      });
+    });
+    }
 
-// const addDept(){
 
-// }
 
 // const updateEmpRole(){
 
