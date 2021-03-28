@@ -45,7 +45,7 @@ function mainMenu() {
             switch (answer.action) {
                 case "View all employees":
                     allEmp();
-                    // allEmp () is replaced with "Dan"
+
                     break;
 
                 case "View all employees by role":
@@ -102,7 +102,7 @@ const allDept = () => {
 },
 
     // view all employees by role function 
-allRole = () => {
+    allRole = () => {
         const query = "SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;";
         connection.query(query, function (err, data) {
             if (err) throw err;
@@ -111,10 +111,11 @@ allRole = () => {
         });
 
     },
+
     addEmp = () => {
-        connection.query("SELECT * FROM role", function (err, res) {
+        connection.query("SELECT * FROM role", function (err, data) {
             if (err) throw err;
-    
+
             inquirer
                 .prompt([
                     {
@@ -132,8 +133,8 @@ allRole = () => {
                         type: "list",
                         choices: function () {
                             var roleList = [];
-                            for (let i = 0; i < res.length; i++) {
-                                roleList.push(res[i].title);
+                            for (let i = 0; i < data.length; i++) {
+                                roleList.push(data[i].title);
                             }
                             return roleList;
                         },
@@ -143,26 +144,26 @@ allRole = () => {
                         type: "input",
                         message: "What is the manager id number?",
                         name: "managerID"
-                      }
-    
+                    }
+
                 ]).then(function (answer) {
                     let roleID;
-                    for (let x = 0; x < res.length; x++) {
-                        if (res[x].title == answer.role) {
-                            roleID = res[x].id;
+                    for (let x = 0; x < data.length; x++) {
+                        if (data[x].title == answer.role) {
+                            roleID = data[x].id;
                             console.log(roleID)
                         }
-    
+
                     }
                     let managerID;
-                    for (let k = 0; k < res.length; k++) {
-                        if (res[k].title == answer.manager) {
-                            managerID = res[k].id;
+                    for (let k = 0; k < data.length; k++) {
+                        if (data[k].title == answer.manager) {
+                            managerID = data[k].id;
                             console.log(managerID)
                         }
                     }
-    
-    
+
+
                     connection.query(
                         "INSERT INTO employee SET ?",
                         {
@@ -180,12 +181,67 @@ allRole = () => {
                 })
         })
     }
-              
-// }
 
-// const addRole(){
+addDept = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'newDepartment',
+                message: 'What is the name of the Department you would like to add?'
+            }
 
-// }
+        ]).then(function (answer) {
+            connection.query(
+                "INSERT INTO department SET ?",
+                {
+                    name: answer.newDepartment,
+                });
+          
+                console.log(`${answer.newDepartment} has successfully been added to Departments`);
+                mainMenu();
+            
+
+        })
+};
+
+
+
+
+
+const addRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What's the name of the role?",
+                name: "newRole"
+            },
+            {
+                type: "input",
+                message: "What is the salary for this role?",
+                name: "addSal"
+            },
+            {
+                type: "input",
+                message: "What is the department id number?",
+                name: "deptId"
+            }
+        ]).then(function (answer) {
+            connection.query(
+                "INSERT INTO role SET ?",
+                {
+                    name: answer.newRole,
+                    name: answer.addSal,
+                    name: answer.deptId
+                });
+          
+                console.log(`${answer.newRole} has successfully been added to Roles`);
+                mainMenu();
+            
+
+        })
+};
 
 // const addDept(){
 
