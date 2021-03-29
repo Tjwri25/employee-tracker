@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+require('dotenv').config();
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -11,7 +13,7 @@ const connection = mysql.createConnection({
     user: 'root',
 
 
-    password: 'Kross!0325',
+    password: process.env.password,
     database: 'employeeDB',
 });
 
@@ -70,7 +72,7 @@ function mainMenu() {
             }
         });
 };
-// view all employee function 
+
 const allEmp = () => {
 
 
@@ -81,7 +83,7 @@ const allEmp = () => {
         mainMenu();
     });
 }
-// view all employees by department function
+
 const allDept = () => {
     const query = "SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;";
     connection.query(query, function (err, data) {
@@ -92,7 +94,7 @@ const allDept = () => {
 
 },
 
-    // view all employees by role function 
+
     allRole = () => {
         const query = "SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;";
         connection.query(query, function (err, data) {
@@ -163,8 +165,9 @@ const allDept = () => {
                             role_id: roleID,
                             manager_id: answer.managerID
                         },
-                        function (err) {
-                            if (err) throw err;
+                        (err) => {
+                            if (err)
+                                throw err;
                             console.log(`Successfully added ${answer.first_name} ${answer.last_name} to Employees`);
                             mainMenu();
                         }
@@ -265,8 +268,9 @@ addRole = () => {
                     salary: answer.salary,
                     department_id: answer.deptId
                 },
-                function (err) {
-                    if (err) throw err
+                (err) => {
+                    if (err)
+                        throw err;
                     console.log(`${answer.title} has successfully been added to Roles`);
                     mainMenu();
                 }
