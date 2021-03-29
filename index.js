@@ -32,7 +32,6 @@ function mainMenu() {
                 "View all employees",
                 "View all employees by role",
                 "View all employees by department",
-                "View all employees by manager",
                 "Add employee",
                 "Add role",
                 "Add department",
@@ -51,9 +50,6 @@ function mainMenu() {
                     break;
                 case "View all employees by department":
                     allDept();
-                    break;
-                case "View all employees by manager":
-                    allMngr();
                     break;
                 case "Add employee":
                     addEmp();
