@@ -15,7 +15,14 @@ With this app you can:
 
 
 
-## Install
+## Installation
    * npm install mysql
    * npm install inquirer
-   
+
+## Building Tools
+ * Javascript
+ * MySQL
+ * Node.js
+
+## Demo 
+
