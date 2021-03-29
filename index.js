@@ -37,7 +37,7 @@ function mainMenu() {
                 "Add role",
                 "Add department",
                 "Update employee role",
-                "Update employee manager",
+
 
             ],
         })
@@ -45,9 +45,7 @@ function mainMenu() {
             switch (answer.action) {
                 case "View all employees":
                     allEmp();
-
                     break;
-
                 case "View all employees by role":
                     allRole();
                     break;
@@ -68,9 +66,6 @@ function mainMenu() {
                     break;
                 case "Update employee role":
                     updateEmpRole();
-                    break;
-                case "Update employee manager":
-                    updateEmpMngr();
                     break;
                 case 'Exit':
                     connection.end();
@@ -197,10 +192,10 @@ addDept = () => {
                 {
                     name: answer.newDepartment,
                 });
-          
-                console.log(`${answer.newDepartment} has successfully been added to Departments`);
-                mainMenu();
-            
+
+            console.log(`${answer.newDepartment} has successfully been added to Departments`);
+            mainMenu();
+
 
         })
 };
@@ -210,26 +205,26 @@ addDept = () => {
 
 
 addRole = () => {
-   
+
     inquirer
         .prompt([
             {
                 type: "input",
                 name: "newRole",
                 message: "What's the name of this role?"
-                
+
             },
             {
                 type: "input",
                 name: "addSal",
                 message: "What is the salary for this role?"
-                
+
             },
             {
                 type: "input",
                 name: "deptId",
                 message: "What is the department id number?"
-               
+
             }
         ]).then(function (answer) {
             connection.query(
@@ -239,60 +234,90 @@ addRole = () => {
                     salary: answer.addSal,
                     department_id: answer.deptId
                 });
-           
-                console.log(`${answer.newRole} has successfully been added to Roles`);
-                mainMenu();
-            
+
+            console.log(`${answer.newRole} has successfully been added to Roles`);
+            mainMenu();
+
 
         })
 };
-addRole = () => { 
-    connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role",   function(err, res) {
-      inquirer.prompt([
-          {
-            name: "title",
-            type: "input",
-            message: "What is the title of this role"
-          },
-          {
-            name: "salary",
-            type: "input",
-            message: "What is the salary of this role?"
-  
-          },
-          {
-            name: "deptId",
-            type: "input",
-            message: "What is the department id number?"
-           
-        }
-      ]).then(function(answer) {
-          connection.query(
-              "INSERT INTO role SET ?",
-              {
-                title: answer.title,
-                salary: answer.salary,
-                department_id: answer.deptId
-              },
-              function(err) {
-                  if (err) throw err
-                  console.log(`${answer.newRole} has successfully been added to Roles`);
-                  mainMenu();
-              }
-          )
-  
-      });
+addRole = () => {
+    connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role", function (err, res) {
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "What is the title of this role"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the salary of this role?"
+
+            },
+            {
+                name: "deptId",
+                type: "input",
+                message: "What is the department id number?"
+
+            }
+        ]).then(function (answer) {
+            connection.query(
+                "INSERT INTO role SET ?",
+                {
+                    title: answer.title,
+                    salary: answer.salary,
+                    department_id: answer.deptId
+                },
+                function (err) {
+                    if (err) throw err
+                    console.log(`${answer.title} has successfully been added to Roles`);
+                    mainMenu();
+                }
+            )
+
+        });
     });
-    }
+}
+
+updateEmpRole = () => {
 
 
+        inquirer
+            .prompt([
+                {
 
-// const updateEmpRole(){
+                    name: "pickEmp",
+                    type: "input",
+                    message: "What is the ID number of the employee you'd like to update?"
 
-// }
+                },
+                {
+                    name: "updateRole",
+                    type: "input",
+                    message: "What is the employees new role ID?"
 
-// const updateEmpMngr(){
+                },
+            ]).then(function (answer) {
+                connection.query(
+                    "UPDATE employee SET ? WHERE ?",
+                        [{
+                        role_id: answer.updateRole},
+                        {
+                        id: answer.pickEmp,
+                        },],
+                    (err) => {
+                        if (err)
+                            throw err;
+                        console.log("Employee's role has sucessfully been updated");
+                        mainMenu();
+                    }
+                );
 
-// }
+            });
+    
+}
+
+
 
 
